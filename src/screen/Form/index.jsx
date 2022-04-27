@@ -8,14 +8,17 @@ import ErrorPage from '../ErrorPage';
 const Form = ({ view, setView }) => {
   const [data, setData] = useState({
     package: 'standard',
+    age: '',
+    name: '',
+    currency: '',
+    country: '',
   });
   const countries = [
     { label: 'Hong Kong', currency: 'HKD', rate: 1 },
     { label: 'USA', currency: 'USD', rate: 2 },
     { label: 'Australia', currency: 'AUD', rate: 3 },
   ];
-
-  const premium = 10 * data?.age * data?.rate;
+  const premium = 10 * Number(data?.age) * data?.rate;
 
   const handlePremium = () => {
     if (data?.package === 'standard') {
@@ -29,6 +32,13 @@ const Form = ({ view, setView }) => {
     }
     if (data?.package === 'super') {
       return 1.75 * premium;
+    }
+  };
+
+  const handleAgeOnChange = (e) => {
+    const isNumber = /^[0-9\b]+$/;
+    if (e.target.value === '' || isNumber.test(e.target.value)) {
+      setData({ ...data, age: e.target.value });
     }
   };
 
@@ -57,9 +67,7 @@ const Form = ({ view, setView }) => {
               label='Age'
               placeholder='Add age'
               value={data?.age}
-              onChange={(e) =>
-                setData({ ...data, age: Number(e.target.value) })
-              }
+              onChange={handleAgeOnChange}
             />
           </div>
           <div className='inputCont'>
@@ -150,7 +158,10 @@ const Form = ({ view, setView }) => {
               fontFamily: 'system-ui',
               minWidth: '200px',
             }}
-            onClick={() => setView('welcome')}
+            onClick={() => {
+              setData({});
+              setView('welcome');
+            }}
           />
         </div>
       ) : (
